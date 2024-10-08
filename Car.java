@@ -1,62 +1,48 @@
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
-//Today's Goal:
-//
-//Car <Interface>
-//-> FourDoorCar <Abstract Class>
-//->->FourDoorToyota <Class>
-//->->FourDoorBMW <Class>
-//->->FourDoorFord<Class>
-//->->FourDoorHyundai <Class>
-//-> TwoDoorCar <Abstract Class>
-//->->TwoDoorToyota <Class>
-//->->TwoDoorBMW <Class>
-//->->TwoDoorFord <Class>
-//->->TwoDoorHyundai <Class>
-//1- Create Car Interface:
-//
-//it should have run, stop, repair functions.
-//###################################################
-//- model
-//- year
-//- color
-//- engineType ### TwoDoorCar
-//- transmission
-//- numberOfDoors (fixed to 4)
-//- seatingCapacity
-//##################################################
-//Deadline 3.15pm
 public interface Car {
     void start();
     void stop();
     void repair();
+    double sell(double mileage, double power);
 }
-abstract class FourDoorCar implements Car{
 
-        String model;
-        int year;
-        String color;
-        public FourDoorCar(String model, int year, String color){
-            this.model = model;
-            this.color = color;
-            this.year = year;
+abstract class FourDoorCar implements Car {
+    String model;
+    int year;
+    String color;
+    double basePrice;
 
-        }
+    public FourDoorCar(String model, int year, String color, double basePrice) {
+        this.model = model;
+        this.color = color;
+        this.year = year;
+        this.basePrice = basePrice;
+    }
+
+    @Override
+    public double sell(double mileage, double power) {
+        int currentYear = java.time.Year.now().getValue();
+        int age = currentYear - year;
+        double depreciationValue = (basePrice * 0.15 * age) + (mileage * 0.01) - (power * 0.1);
+        return Math.max(0, basePrice - depreciationValue);
+    }
 
     @Override
     public void start() {
-        System.out.println("The Car driven");
-
+        System.out.println(model + " has started.");
     }
 
     @Override
     public void stop() {
-        System.out.println("The car is stopped");
+        System.out.println(model + " has stopped.");
     }
 
     @Override
     public void repair() {
-        System.out.println("The Car is repairing");
+        System.out.println(model + " is being repaired.");
     }
 
     @Override
@@ -65,50 +51,91 @@ abstract class FourDoorCar implements Car{
                 "model='" + model + '\'' +
                 ", year=" + year +
                 ", color='" + color + '\'' +
+                ", basePrice=" + basePrice +
                 '}';
     }
+}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        FourDoorCar that = (FourDoorCar) o;
-        return year == that.year && Objects.equals(model, that.model);
+class FourDoorToyota extends FourDoorCar {
+    public FourDoorToyota(String model, int year, String color, double basePrice) {
+        super(model, year, color, basePrice);
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(model, year);
+    public String toString() {
+        return "FourDoorToyota{" + super.toString() + '}';
     }
 }
-abstract class TwoDoorCar implements Car{
+
+class FourDoorBMW extends FourDoorCar {
+    public FourDoorBMW(String model, int year, String color, double basePrice) {
+        super(model, year, color, basePrice);
+    }
+
+    @Override
+    public String toString() {
+        return "FourDoorBMW{" + super.toString() + '}';
+    }
+}
+
+class FourDoorFord extends FourDoorCar {
+    public FourDoorFord(String model, int year, String color, double basePrice) {
+        super(model, year, color, basePrice);
+    }
+
+    @Override
+    public String toString() {
+        return "FourDoorFord{" + super.toString() + '}';
+    }
+}
+
+class FourDoorHyundai extends FourDoorCar {
+    public FourDoorHyundai(String model, int year, String color, double basePrice) {
+        super(model, year, color, basePrice);
+    }
+
+    @Override
+    public String toString() {
+        return "FourDoorHyundai{" + super.toString() + '}';
+    }
+}
+
+abstract class TwoDoorCar implements Car {
     String model;
     int year;
     String color;
-    String enginType;
-    int seatingCapacity;
+    String engineType;
+    double basePrice;
 
-    public TwoDoorCar(String model, int year, String color, String enginType, int seatingCapacity) {
+    public TwoDoorCar(String model, int year, String color, String engineType, double basePrice) {
         this.model = model;
         this.year = year;
         this.color = color;
-        this.enginType = enginType;
-        this.seatingCapacity = seatingCapacity;
+        this.engineType = engineType;
+        this.basePrice = basePrice;
     }
+
+    @Override
+    public double sell(double mileage, double power) {
+        int currentYear = java.time.Year.now().getValue();
+        int age = currentYear - year;
+        double depreciationValue = (basePrice * 0.15 * age) + (mileage * 0.01) - (power * 0.1);
+        return Math.max(0, basePrice - depreciationValue);
+    }
+
     @Override
     public void start() {
-        System.out.println("The Car has started");
-
+        System.out.println(model + " has started.");
     }
 
     @Override
     public void stop() {
-        System.out.println("The car has stopped");
+        System.out.println(model + " has stopped.");
     }
 
     @Override
     public void repair() {
-        System.out.println("The Car has repaired");
+        System.out.println(model + " is being repaired.");
     }
 
     @Override
@@ -117,142 +144,143 @@ abstract class TwoDoorCar implements Car{
                 "model='" + model + '\'' +
                 ", year=" + year +
                 ", color='" + color + '\'' +
-                ", enginType='" + enginType + '\'' +
-                ", seatingCapacity=" + seatingCapacity +
+                ", engineType='" + engineType + '\'' +
+                ", basePrice=" + basePrice +
                 '}';
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        TwoDoorCar that = (TwoDoorCar) o;
-        return year == that.year && Objects.equals(model, that.model);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(model, year);
-    }
 }
 
-
-
-class FourDoorToyota extends FourDoorCar{
-
-
-    public FourDoorToyota(String model, int year, String color) {
-        super(model, year, color);
+class TwoDoorToyota extends TwoDoorCar {
+    public TwoDoorToyota(String model, int year, String color, String engineType, double basePrice) {
+        super(model, year, color, engineType, basePrice);
     }
 
     @Override
     public String toString() {
-        return "FourDoorToyota{" +
-                "model='" + model + '\'' +
-                ", year=" + year +
-                ", color='" + color + '\'' +
-                "} " ;
+        return "TwoDoorToyota{" + super.toString() + '}';
     }
 }
-class FourDoorBMW extends FourDoorCar{
 
-    public FourDoorBMW(String model, int year, String color) {
-        super(model, year, color);
+class TwoDoorBMW extends TwoDoorCar {
+    public TwoDoorBMW(String model, int year, String color, String engineType, double basePrice) {
+        super(model, year, color, engineType, basePrice);
     }
 
     @Override
     public String toString() {
-        return "FourDoorBMW{" +
-                "model='" + model + '\'' +
-                ", year=" + year +
-                ", color='" + color + '\'' +
-                "} " ;
+        return "TwoDoorBMW{" + super.toString() + '}';
     }
 }
-class FourDoorFord extends FourDoorCar{
 
-    public FourDoorFord(String model, int year, String color) {
-        super(model, year, color);
+class TwoDoorFord extends TwoDoorCar {
+    public TwoDoorFord(String model, int year, String color, String engineType, double basePrice) {
+        super(model, year, color, engineType, basePrice);
     }
 
     @Override
     public String toString() {
-        return "FourDoorFord{" +
-                "model='" + model + '\'' +
-                ", year=" + year +
-                ", color='" + color + '\'' +
-                "} " ;
+        return "TwoDoorFord{" + super.toString() + '}';
     }
 }
-class FourDoorHyundai extends FourDoorCar{
 
-    public FourDoorHyundai(String model, int year, String color) {
-        super(model, year, color);
+class TwoDoorHyundai extends TwoDoorCar {
+    public TwoDoorHyundai(String model, int year, String color, String engineType, double basePrice) {
+        super(model, year, color, engineType, basePrice);
     }
 
     @Override
     public String toString() {
-        return "FourDoorHyundai{" +
-                "model='" + model + '\'' +
-                ", year=" + year +
-                ", color='" + color + '\'' +
-                "} " ;
+        return "TwoDoorHyundai{" + super.toString() + '}';
     }
 }
-class TwoDoorToyota extends TwoDoorCar{
 
-    public TwoDoorToyota(String model, int year, String color, String enginType, int seatingCapacity) {
-        super(model, year, color, enginType, seatingCapacity);
+class Dealer {
+    private String name;
+    private double money;
+    private List<Car> cars;
+
+    public Dealer(String name, double money) {
+        this.name = name;
+        this.money = money;
+        this.cars = new ArrayList<>();
     }
 
-    @Override
-    public String toString() {
-        return "TwoDoorToyota{" +
-                "model='" + model + '\'' +
-                ", year=" + year +
-                ", color='" + color + '\'' +
-                ", enginType='" + enginType + '\'' +
-                ", seatingCapacity=" + seatingCapacity +
-                "} " ;
+    public void addCar(Car car) {
+        cars.add(car);
+        System.out.println(car + " added to the dealer.");
     }
-}
-class TwoDoorBMW extends TwoDoorCar{
+    public void showCars() {
 
-    public TwoDoorBMW(String model, int year, String color, String enginType, int seatingCapacity) {
-        super(model, year, color, enginType, seatingCapacity);
-    }
-
-    @Override
-    public String toString() {
-        return "TwoDoorBMW{" +
-                "model='" + model + '\'' +
-                ", year=" + year +
-                ", color='" + color + '\'' +
-                ", enginType='" + enginType + '\'' +
-                ", seatingCapacity=" + seatingCapacity +
-                "} " ;
-    }
-}
-class TwoDoorFord extends TwoDoorCar{
-
-    public TwoDoorFord(String model, int year, String color, String enginType, int seatingCapacity) {
-        super(model, year, color, enginType, seatingCapacity);
-    }
-}
-class TwoDoorHyundai extends TwoDoorCar{
-
-    public TwoDoorHyundai(String model, int year, String color, String enginType, int seatingCapacity) {
-        super(model, year, color, enginType, seatingCapacity);
+        if (cars.isEmpty()) {
+            System.out.println("No cars available.");
+        } else {
+            for (int i = 0; i < cars.size(); i++) {
+                System.out.println("Cars available at " + name + ":");
+                System.out.println(i + ": " + cars.get(i));
+            }
+        }
     }
 
-    @Override
-    public String toString() {
-        return "TwoDoorHyundai{" +
-                "model='" + model + '\'' +
-                ", year=" + year +
-                ", color='" + color + '\'' +
-                ", enginType='" + enginType + '\'' +
-                ", seatingCapacity=" + seatingCapacity +
-                "} " ;
+
+    public void sellCar(int index, double mileage, double power) {
+        if (index >= 0 && index < cars.size()) {
+            Car car = cars.get(index);
+            double sellingPrice = car.sell(mileage, power);
+            if (sellingPrice <= money) {
+                money -= sellingPrice;
+                cars.remove(index);
+                System.out.println("Car sold for $" + sellingPrice + ". Remaining money: $" + money);
+            } else {
+                System.out.println("Not enough money to buy this car.");
+            }
+        } else {
+            System.out.println("Invalid car index.");
+        }
+    }
+
+    public void dealerMenu() {
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            System.out.println("\nDealer Menu:");
+            System.out.println("1. Show Cars");
+            System.out.println("2. Add Car");
+            System.out.println("3. Sell Car");
+            System.out.println("4. Exit");
+            System.out.print("Choose an option: ");
+            int choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    showCars();
+                    break;
+                case 2:
+                    // Example for adding a car
+                    System.out.print("Enter model: ");
+                    String model = scanner.next();
+                    System.out.print("Enter year: ");
+                    int year = scanner.nextInt();
+                    System.out.print("Enter color: ");
+                    String color = scanner.next();
+                    System.out.print("Enter base price: ");
+                    double basePrice = scanner.nextDouble();
+                    addCar(new FourDoorToyota(model, year, color, basePrice));
+                    break;
+                case 3:
+                    showCars();
+                    System.out.print("Select car index to sell: ");
+                    int index = scanner.nextInt();
+                    System.out.print("Enter mileage: ");
+                    double mileage = scanner.nextDouble();
+                    System.out.print("Enter power: ");
+                    double power = scanner.nextDouble();
+                    sellCar(index, mileage, power);
+                    break;
+                case 4:
+                    System.out.println("Exiting dealer menu.");
+                    return;
+                default:
+                    System.out.println("Invalid option, try again.");
+            }
+        }
     }
 }
