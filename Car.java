@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -205,6 +206,14 @@ class Dealer {
         this.cars = new ArrayList<>();
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public void addCar(Car car) {
         cars.add(car);
         System.out.println(car + " added to the dealer.");
@@ -216,7 +225,7 @@ class Dealer {
         } else {
             for (int i = 0; i < cars.size(); i++) {
                 System.out.println("Cars available at " + name + ":");
-                System.out.println(i + ": " + cars.get(i));
+                System.out.println(cars.get(i));
             }
         }
     }
@@ -284,3 +293,74 @@ class Dealer {
         }
     }
 }
+//2- Create Dealers class and store Dealer arraylist  in it.
+// also there should be dealersMenu() function to run program
+//
+//When I run program I should see an options to see existing dealers or create new dealers.
+// in the Dealer class we already have menu function so when I select existing dealer
+// I need to go in that dealer and work on with that menu.
+// if I exit O should be able to return main Dealers class menu and able to select
+// from the menu again existing dealers create new dealer.
+class Dealers {
+    ArrayList<Dealer> dealersList;
+    public Dealers(ArrayList<Dealer> dealersList){
+        this.dealersList = new ArrayList<>();
+    }
+    public void dealersMenu(){
+        Scanner scanner = new Scanner(System.in);
+        String options;
+
+        do{
+            System.out.println("Dealers Menu");
+            System.out.println("============");
+            System.out.println("1. View Existing Dealers");
+            System.out.println("2. Create New Dealer");
+            System.out.println("3. Exit");
+            options = scanner.nextLine();
+            switch (options){
+                case "1":
+                    viewExistingDealers();
+                    break;
+                case "2":
+                    createNewDealer();
+                    break;
+                case "3":
+                    System.out.println("Exiting . . .");
+                    break;
+                default:
+                    System.out.println("Invalid Choice, Please try again");
+            }
+        }while (!options.equals("3"));
+    }
+    private void viewExistingDealers() {
+        if (dealersList.isEmpty()) {
+            System.out.println("No existing dealers.");
+            return;
+        }
+
+        Scanner scanner = new Scanner(System.in);
+        for (int i = 0; i < dealersList.size(); i++) {
+          System.out.println((i + 1) + ". " + dealersList.get(i).getName());
+        }
+        System.out.println("Select a dealer to view its menu or enter 0 to return:");
+
+        int dealerChoice = Integer.parseInt(scanner.nextLine());
+        if (dealerChoice > 0 && dealerChoice <= dealersList.size()) {
+            dealersList.get(dealerChoice - 1).dealerMenu();
+        } else {
+            System.out.println("Returning to main menu...");
+        }
+    }
+
+    private void createNewDealer(){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter Dealer Name:");
+        String dealerName = scanner.nextLine();
+        System.out.println("Dealer " + dealerName + " created successfully.");
+    }
+
+}
+
+
+
+

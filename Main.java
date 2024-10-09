@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Main {
     public static void main(String[] args) {
         FourDoorCar myCar = new FourDoorBMW("3 Series",2020,"Black",5000);
@@ -15,6 +17,10 @@ public class Main {
         System.out.println("The Selling Price: "+myCar.sell(1000,50));
         Dealer dealer = new Dealer("Hana",2000);
         dealer.dealerMenu();
+        ArrayList<Dealer> initialDealers = new ArrayList<>();
+        initialDealers.add(new Dealer("Hana",2000));
+        Dealers dealers = new Dealers(initialDealers);
+        dealers.dealersMenu();
 
     }
 }
